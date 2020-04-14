@@ -1,13 +1,14 @@
 
 import 'package:flutter/material.dart';
 import 'hero.dart';
+import 'heroview.dart';
 
 class HeroesList extends StatelessWidget {
 
   List<SinfoHero> heroes = <SinfoHero>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
-  Widget _buildHeroes() {
+    Widget _buildHeroes() {
     this.heroes.add(new SinfoHero(12354, "Test1"));
     this.heroes.add(new SinfoHero(12345, "Test2"));
     this.heroes.add(new SinfoHero(12346, "Test3"));
@@ -34,10 +35,10 @@ class HeroesList extends StatelessWidget {
         icon: Icon(Icons.arrow_forward),
         color: Colors.blue,
         onPressed: () {
-         /* Navigator.push(
+         Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ),
-          );*/
+            MaterialPageRoute(builder: (context) => HeroView(hero))
+          );
         },
       )
     );
@@ -50,6 +51,16 @@ class HeroesList extends StatelessWidget {
         title: Text('SINFO Heroes'),
       ),
       body: _buildHeroes(),
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Container(height: 50.0),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Add Hero',
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked
     );
   }
 

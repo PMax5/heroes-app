@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:heroesapp/heroview.dart';
 
 import 'heroes.dart';
 

@@ -1,21 +1,22 @@
 class SinfoHero {
   int heroId;
-  String heroTitle;
+  String heroName;
 
-  SinfoHero(int id, String title) {
+  SinfoHero(int id, String name) {
     this.heroId = id;
-    this.heroTitle = title;
+    this.heroName = name;
   }
 
   factory SinfoHero.fromJson(Map<String, dynamic> json) {
-    return SinfoHero(json['id'], json['title']);
+    return SinfoHero(json['id'], json['name']);
   }
 
   int getId() {
     return this.heroId;
   }
 
-  String getTitle() {
-    return this.heroTitle;
+  String getName() {
+    return this.heroName;
   }
+
 }

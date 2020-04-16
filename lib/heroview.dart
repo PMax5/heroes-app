@@ -23,7 +23,7 @@ class HeroView extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
-                    "Hero Name: " + this.hero.getTitle(),
+                    "Hero Name: " + this.hero.getName(),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0

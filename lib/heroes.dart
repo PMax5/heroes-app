@@ -1,47 +1,66 @@
 
 import 'package:flutter/material.dart';
+import 'package:heroesapp/herocreationview.dart';
+import 'package:heroesapp/heroservice.dart';
 import 'hero.dart';
 import 'heroview.dart';
 
 class HeroesList extends StatelessWidget {
 
-  List<SinfoHero> heroes = <SinfoHero>[];
+  Future<List<SinfoHero>> heroes;
+  HeroService heroesService = new HeroService();
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
-    Widget _buildHeroes() {
-    this.heroes.add(new SinfoHero(12354, "Test1"));
-    this.heroes.add(new SinfoHero(12345, "Test2"));
-    this.heroes.add(new SinfoHero(12346, "Test3"));
-    this.heroes.add(new SinfoHero(12347, "Test4"));
-    this.heroes.add(new SinfoHero(12348, "Test5"));
+    Future<List<SinfoHero>> getHeroes() async {
+      return heroesService.getHeroes();
+    }
 
-    return ListView.separated(
-        padding: const EdgeInsets.all(16.0),
-        itemCount: heroes.length,
-        itemBuilder: /*1*/ (context, i) {
-          return _buildRow(this.heroes[i], context);
-        },
-       separatorBuilder: (BuildContext context, int index) => const Divider()
+    Widget _buildHeroes() {
+
+    return FutureBuilder<List<SinfoHero>>(
+      future: getHeroes(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return Text(
+                'Could not load any heroes!'
+            );
+          }
+
+          return ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, i) {
+                return _buildRow(snapshot.data[i], context);
+              }
+          );
+        }
     );
   }
 
   Widget _buildRow(SinfoHero hero, BuildContext context) {
-    return ListTile(
-      title: Text(
-        hero.getTitle(),
-        style: _biggerFont,
-      ),
-      trailing: IconButton(
-        icon: Icon(Icons.arrow_forward),
-        color: Colors.blue,
-        onPressed: () {
-         Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => HeroView(hero))
-          );
-        },
-      )
-    );
+    return
+      Card(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(
+                hero.getName(),
+                style: _biggerFont,
+            ),
+              trailing: IconButton(
+              icon: Icon(Icons.arrow_forward),
+                color: Colors.blue,
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HeroView(hero))
+                  );
+               },
+              )
+            )
+          ],
+        ),
+      );
   }
 
   @override
@@ -56,7 +75,12 @@ class HeroesList extends StatelessWidget {
         child: Container(height: 50.0),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HeroCreationView())
+          );
+        },
         tooltip: 'Add Hero',
         child: Icon(Icons.add),
       ),

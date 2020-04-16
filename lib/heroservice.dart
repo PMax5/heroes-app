@@ -6,17 +6,17 @@ import 'hero.dart';
 
 class HeroService {
 
-  final String apiUrl = "https://pmxpt.dev/heroes";
+  final String apiUrl = "https://api.pmxpt.dev/";
 
   Future<SinfoHero> createHero(int id, String title) async {
     final http.Response response = await http.post(
       this.apiUrl + "/hero",
       headers: <String, String> {
-        'Content-Type': 'application/json; charset=UTF-8'
+        'Content-Type': 'application/json'
       },
       body: jsonEncode(<String, dynamic> {
         'id': id,
-        'title': title
+        'name': title
       })
     );
 
@@ -33,7 +33,7 @@ class HeroService {
     final http.Response response = await http.get(
       this.apiUrl + "/hero",
       headers: <String, String> {
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Access-Control-Allow-Headers': 'Content-Type'
       }
@@ -52,7 +52,7 @@ class HeroService {
     final http.Response response = await http.get(
       this.apiUrl + "/hero" + heroId.toString(),
         headers: <String, String> {
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Access-Control-Allow-Headers': 'Content-Type'
         }

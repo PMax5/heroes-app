@@ -7,6 +7,11 @@ import 'hero.dart';
 class HeroService {
 
   final String apiUrl = "https://api.pmxpt.dev/";
+  final Map<String, String> requestHeaders = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  };
 
   Future<SinfoHero> createHero(int id, String title) async {
     final http.Response response = await http.post(
@@ -32,11 +37,7 @@ class HeroService {
     
     final http.Response response = await http.get(
       this.apiUrl + "/hero",
-      headers: <String, String> {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Access-Control-Allow-Headers': 'Content-Type'
-      }
+      headers: requestHeaders
     );
 
     if (response.statusCode != 200)
@@ -51,17 +52,23 @@ class HeroService {
 
     final http.Response response = await http.get(
       this.apiUrl + "/hero" + heroId.toString(),
-        headers: <String, String> {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Access-Control-Allow-Headers': 'Content-Type'
-        }
+      headers: requestHeaders
     );
 
     if (response.statusCode != 200)
       throw Exception("[SINFO Heroes] Failed to load heroes.");
 
     return SinfoHero.fromJson(json.decode(response.body));
+  }
+
+  void deleteHero(int heroId) async {
+    final http.Response response = await http.delete(
+      this.apiUrl + "/hero/" + heroId.toString(),
+      headers: requestHeaders
+    );
+
+    if (response.statusCode != 200)
+      throw Exception("[SINFO Heroes] Failed to delete hero.");
   }
 
 }

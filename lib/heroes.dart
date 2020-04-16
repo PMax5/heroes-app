@@ -12,7 +12,11 @@ class HeroesList extends StatelessWidget {
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
     Future<List<SinfoHero>> getHeroes() async {
-      return heroesService.getHeroes();
+      try {
+        return heroesService.getHeroes();
+      } catch (Exception) {
+        print("[SINFO Heroes] Could not load heroes...");
+      }
     }
 
     Widget _buildHeroes() {

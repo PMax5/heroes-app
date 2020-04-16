@@ -1,11 +1,13 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:heroesapp/heroservice.dart';
 import 'hero.dart';
 
 class HeroView extends StatelessWidget {
 
   SinfoHero hero;
+  HeroService heroService = new HeroService();
 
   HeroView(SinfoHero hero) {
     this.hero = hero;
@@ -63,10 +65,37 @@ class HeroView extends StatelessWidget {
     );
   }
 
-  Widget _buildDeleteButton() {
+  Widget _buildDeleteButton(BuildContext context) {
     return RaisedButton(
       color: Colors.red,
-      onPressed: () {},
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Deletion Confirmation"),
+              content: new Text("Are you sure you want to delete this hero?"),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text("Close"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }
+                ),
+                new FlatButton(
+                    child: new Text("Confirm"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.pop(context);
+                      heroService.deleteHero(hero.getId());
+                    }
+                ),
+              ],
+            );
+          },
+        );
+      },
       child: const Text(
           'Delete',
           style: TextStyle(
@@ -87,7 +116,7 @@ class HeroView extends StatelessWidget {
         children: <Widget>[
           _buildTitleSection(),
           _buildEditButton(),
-          _buildDeleteButton()
+          _buildDeleteButton(context)
         ],
       )
     );

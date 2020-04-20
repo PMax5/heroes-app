@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:heroesapp/heroservice.dart';
+import 'heroeditview.dart';
+import 'logger.dart';
 import 'hero.dart';
 
 class HeroView extends StatelessWidget {
@@ -13,7 +15,16 @@ class HeroView extends StatelessWidget {
     this.hero = hero;
   }
 
-  Widget _buildTitleSection() {
+  deleteHero(BuildContext context, int id) {
+    try {
+      this.heroService.deleteHero(id);
+      Logger.logAction("Deleted hero with id=" + id.toString());
+    } catch(Exception) {
+      Logger.logError("Failed to create hero with " + "and id=" + id.toString());
+    }
+  }
+
+  Widget buildTitleSection() {
     return Container(
       padding: const EdgeInsets.all(32),
       child: Row(
@@ -51,10 +62,15 @@ class HeroView extends StatelessWidget {
     );
   }
 
-  Widget _buildEditButton() {
+  Widget buildEditButton(BuildContext context) {
     return RaisedButton(
       color: Colors.blue,
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HeroEditView(this.hero))
+        );
+      },
       child: const Text(
           'Edit',
           style: TextStyle(
@@ -65,14 +81,13 @@ class HeroView extends StatelessWidget {
     );
   }
 
-  Widget _buildDeleteButton(BuildContext context) {
+  Widget buildDeleteButton(BuildContext context) {
     return RaisedButton(
       color: Colors.red,
       onPressed: () {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            // return object of type Dialog
             return AlertDialog(
               title: new Text("Deletion Confirmation"),
               content: new Text("Are you sure you want to delete this hero?"),
@@ -88,7 +103,7 @@ class HeroView extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                       Navigator.pop(context);
-                      heroService.deleteHero(hero.getId());
+                      this.heroService.deleteHero(this.hero.getId());
                     }
                 ),
               ],
@@ -114,9 +129,9 @@ class HeroView extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          _buildTitleSection(),
-          _buildEditButton(),
-          _buildDeleteButton(context)
+          this.buildTitleSection(),
+          this.buildEditButton(context),
+          this.buildDeleteButton(context)
         ],
       )
     );

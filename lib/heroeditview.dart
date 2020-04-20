@@ -1,23 +1,26 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:heroesapp/logger.dart';
 import 'package:heroesapp/heroservice.dart';
 import 'package:flutter/services.dart';
+import 'hero.dart';
 
-import 'logger.dart';
-
-class HeroCreationView extends StatelessWidget {
+class HeroEditView extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
   HeroService heroService = new HeroService();
-  String heroName;
-  String heroId;
+  SinfoHero hero;
 
-  createHero(BuildContext context, int id, String name) {
+  HeroEditView(SinfoHero hero) {
+    this.hero = hero;
+  }
+
+  updateHeroName(BuildContext context) {
     try {
-      this.heroService.createHero(id, name);
-      Logger.logAction("Created hero with name=" + name + " and id=" + id.toString());
+      this.heroService.updateHeroName(this.hero);
+      Logger.logAction("Updated hero with name=" + this.hero.getName() + " and id=" + this.hero.getId().toString());
     } catch(e) {
-      Logger.logError("Failed to create hero with name=" + name + " and id=" + id.toString());
+      Logger.logError("Failed to update hero with id=" + this.hero.getId().toString());
     }
   }
 
@@ -33,8 +36,10 @@ class HeroCreationView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
+                initialValue: this.hero.getName(),
                 decoration: const InputDecoration(
                   hintText: 'Enter hero name',
+
                 ),
                 validator: (value) {
                   if (value.isEmpty)
@@ -42,10 +47,11 @@ class HeroCreationView extends StatelessWidget {
                   return null;
                 },
                 onChanged: (value) {
-                  this.heroName = value;
+                  this.hero.setName(value);
                 },
               ),
               TextFormField(
+                initialValue: this.hero.getId().toString(),
                 inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                 decoration: const InputDecoration(
                   hintText: 'Enter hero id',
@@ -56,31 +62,29 @@ class HeroCreationView extends StatelessWidget {
                   return null;
                 },
                 onChanged: (value) {
-                  this.heroId = value;
+                  this.hero.setId(int.parse(value));
                 },
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton(
-                color: Colors.blue,
-                onPressed: () {
-                    if (this.formKey.currentState.validate())
-                      this.createHero(context, int.parse(this.heroId), this.heroName);
-                    Navigator.pop(context);
-                },
-                child: const Text(
-                    'Submit',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white
-                    )
-                  ),
-                )
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: RaisedButton(
+                    color: Colors.blue,
+                    onPressed: () {
+                      this.updateHeroName(context);
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                        'Submit',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white
+                        )
+                    ),
+                  )
               )
             ],
           ),
         )
     );
-
   }
 }

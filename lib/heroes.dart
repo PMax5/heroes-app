@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroesapp/herocreationview.dart';
 import 'package:heroesapp/heroservice.dart';
+import 'logger.dart';
 import 'hero.dart';
 import 'heroview.dart';
 
@@ -9,20 +10,20 @@ class HeroesList extends StatelessWidget {
 
   Future<List<SinfoHero>> heroes;
   HeroService heroesService = new HeroService();
-  final _biggerFont = const TextStyle(fontSize: 18.0);
+  final biggerFont = const TextStyle(fontSize: 18.0);
 
-    Future<List<SinfoHero>> getHeroes() async {
+    Future<List<SinfoHero>> getHeroes(BuildContext context) async {
       try {
-        return heroesService.getHeroes();
+        return this.heroesService.getHeroes();
       } catch (Exception) {
-        print("[SINFO Heroes] Could not load heroes...");
+        Logger.logError("Failed to load heroes.");
       }
     }
 
-    Widget _buildHeroes() {
+    Widget buildHeroes(BuildContext context) {
 
     return FutureBuilder<List<SinfoHero>>(
-      future: getHeroes(),
+      future: this.getHeroes(context),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return Text(
@@ -34,14 +35,14 @@ class HeroesList extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               itemCount: snapshot.data.length,
               itemBuilder: (context, i) {
-                return _buildRow(snapshot.data[i], context);
+                return this.buildRow(snapshot.data[i], context);
               }
           );
         }
     );
   }
 
-  Widget _buildRow(SinfoHero hero, BuildContext context) {
+  Widget buildRow(SinfoHero hero, BuildContext context) {
     return
       Card(
         child: Column(
@@ -49,7 +50,7 @@ class HeroesList extends StatelessWidget {
             ListTile(
               title: Text(
                 hero.getName(),
-                style: _biggerFont,
+                style: this.biggerFont,
             ),
               trailing: IconButton(
               icon: Icon(Icons.arrow_forward),
@@ -73,7 +74,7 @@ class HeroesList extends StatelessWidget {
       appBar: AppBar(
         title: Text('SINFO Heroes'),
       ),
-      body: _buildHeroes(),
+      body: this.buildHeroes(context),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         child: Container(height: 50.0),
@@ -82,8 +83,8 @@ class HeroesList extends StatelessWidget {
         onPressed: () {
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HeroCreationView())
-          );
+              new MaterialPageRoute(builder: (context) => HeroCreationView())
+          )
         },
         tooltip: 'Add Hero',
         child: Icon(Icons.add),

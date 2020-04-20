@@ -1,6 +1,5 @@
 
 import 'dart:convert';
-
 import "package:http/http.dart" as http;
 import 'hero.dart';
 
@@ -26,7 +25,7 @@ class HeroService {
     );
 
     if (response.statusCode != 200)
-      throw Exception("[SINFO Heroes] Failed to create hero.");
+      throw new Exception();
 
     return SinfoHero.fromJson(json.decode(response.body));
   }
@@ -41,7 +40,7 @@ class HeroService {
     );
 
     if (response.statusCode != 200)
-      throw Exception("[SINFO Heroes] Failed to load heroes.");
+      throw new Exception();
 
     var heroesJson = json.decode(response.body) as List;
     heroes = heroesJson.map((heroJson) => SinfoHero.fromJson(heroJson)).toList();
@@ -56,7 +55,7 @@ class HeroService {
     );
 
     if (response.statusCode != 200)
-      throw Exception("[SINFO Heroes] Failed to load heroes.");
+      throw new Exception();
 
     return SinfoHero.fromJson(json.decode(response.body));
   }
@@ -68,7 +67,23 @@ class HeroService {
     );
 
     if (response.statusCode != 200)
-      throw Exception("[SINFO Heroes] Failed to delete hero.");
+      throw new Exception();
+  }
+
+  Future<SinfoHero> updateHeroName(SinfoHero hero) async {
+    final http.Response response = await http.put(
+      this.apiUrl + "/hero",
+      headers: requestHeaders,
+      body: jsonEncode(<String, dynamic> {
+        'id': hero.getId(),
+        'name': hero.getName()
+      })
+    );
+
+    if (response.statusCode != 200)
+      throw new Exception();
+
+    return SinfoHero.fromJson(json.decode(response.body));
   }
 
 }

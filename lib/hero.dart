@@ -19,4 +19,12 @@ class SinfoHero {
     return this.heroName;
   }
 
+  void setName(String name) {
+    this.heroName = name;
+  }
+
+  void setId(int id) {
+    this.heroId = id;
+  }
+
 }

@@ -5,7 +5,6 @@ import 'package:heroesapp/heroservice.dart';
 import 'logger.dart';
 import 'hero.dart';
 import 'heroview.dart';
-
 class HeroesList extends StatelessWidget {
 
   Future<List<SinfoHero>> heroes;

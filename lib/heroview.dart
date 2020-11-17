@@ -7,9 +7,6 @@ import 'logger.dart';
 import 'hero.dart';
 
 class HeroView extends StatelessWidget {
-<<<<<<< HEAD
-  
-=======
 
   SinfoHero hero;
   HeroService heroService = new HeroService();
@@ -124,7 +121,6 @@ class HeroView extends StatelessWidget {
     );
   }
 
->>>>>>> dev
   @override
   Widget build(BuildContext context) {
     return Scaffold(
